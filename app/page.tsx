@@ -1,65 +1,85 @@
-import Image from "next/image";
+import Link from 'next/link'
+import Image from 'next/image'
+import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
+import WhatsAppButton from '@/components/WhatsAppButton'
+import { getNavItems, getSettings, getGlobal } from '@/lib/data'
 
-export default function Home() {
+export default async function Home() {
+  const [navItems, settings, homePage] = await Promise.all([
+    getNavItems(),
+    getSettings(),
+    getGlobal('home-page'),
+  ])
+
+  const hero = homePage || {}
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <Navigation items={navItems} />
+      <main className="flex-1">
+        {/* Hero Section with office background */}
+        <section className="relative min-h-[70vh] flex items-center">
+          <Image
+            src="/images/consulta.png"
+            alt="Espacio de atención Centro Selves"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                {hero.heroTitle || 'Centro Selves'}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 mb-4">
+                {hero.heroSubtitle || 'Psicoterapia Sistémica Relacional'}
+              </p>
+              <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                {hero.heroDescription || 'Atención psicológica a adultos, parejas y familias desde una perspectiva sistémico-relacional.'}
+              </p>
+              <a
+                href={`https://wa.me/${settings.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-sage text-white px-8 py-3 rounded-md hover:bg-sage-dark transition-colors text-lg"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" />
+                </svg>
+                {hero.ctaText || 'Agendar una hora'}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="bg-cream py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold mb-4">{hero.faqCtaTitle || '¿Tienes dudas?'}</h2>
+            <p className="text-warm-gray mb-8 max-w-xl mx-auto">
+              {hero.faqCtaDescription || 'Revisa las preguntas frecuentes o contáctame directamente'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/preguntas-frecuentes"
+                className="inline-block border border-sage text-sage px-8 py-3 rounded-md hover:bg-sage hover:text-white transition-colors"
+              >
+                Ver Preguntas Frecuentes
+              </Link>
+              <Link
+                href="/contacto"
+                className="inline-block bg-sage text-white px-8 py-3 rounded-md hover:bg-sage-dark transition-colors"
+              >
+                Contactar
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
-  );
+      <Footer />
+      {settings.whatsapp && <WhatsAppButton phoneNumber={settings.whatsapp} />}
+    </>
+  )
 }
