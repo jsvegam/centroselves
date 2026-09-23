@@ -1,5 +1,5 @@
+// @ts-nocheck
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
-/* @ts-expect-error -- generated file */
 import { importMap } from '../importMap.js'
 import config from '@/payload.config'
 

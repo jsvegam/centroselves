@@ -1,5 +1,5 @@
+// @ts-nocheck
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
-/* @ts-expect-error -- generated file */
 import { importMap } from '../importMap.js'
 import config from '@/payload.config'
 

@@ -12,7 +12,9 @@ const defaultSettings = {
   siteName: 'Centro Selves',
   whatsapp: '56988841961',
   instagram: '@centro.selves',
+  email: '',
   phone: '+56 9 8884 1961',
+  address: '',
   mapUrl: '',
 }
 
@@ -43,7 +45,7 @@ export async function getSettings() {
   return defaultSettings
 }
 
-export async function getGlobal(slug: string) {
+export async function getGlobal(slug: string): Promise<any> {
   try {
     const payload = await getPayloadClient()
     return await payload.findGlobal({ slug })
@@ -51,7 +53,7 @@ export async function getGlobal(slug: string) {
   return null
 }
 
-export async function getCollection(slug: string, sort = 'order') {
+export async function getCollection(slug: string, sort = 'order'): Promise<any[]> {
   try {
     const payload = await getPayloadClient()
     const result = await payload.find({ collection: slug, sort })
