@@ -423,6 +423,7 @@ export default buildConfig({
     outputFile: './payload-types.ts',
   },
   db: postgresAdapter({
+    push: true,
     pool: {
       connectionString: process.env.DATABASE_URL || 'postgresql://localhost:5432/centroselves',
     },
