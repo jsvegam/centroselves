@@ -1,9 +1,24 @@
 import { getPayloadClient } from '@/lib/payload'
 import { NextResponse } from 'next/server'
 
+async function pushSchema(payload: any) {
+  const adapter = payload.db
+  const { pushSchema: drizzlePush } = adapter.requireDrizzleKit()
+  const { apply } = await drizzlePush(
+    adapter.schema,
+    adapter.drizzle,
+    adapter.schemaName ? [adapter.schemaName] : undefined,
+    adapter.tablesFilter,
+  )
+  await apply()
+}
+
 export async function GET() {
   try {
     const payload = await getPayloadClient()
+
+    // Push schema to create tables
+    await pushSchema(payload)
 
     // Create admin user
     try {
